@@ -35,7 +35,7 @@ elif torch.cuda.is_available():
 else:
     device = torch.device("cpu")
 
-model.to(device)
+
 
 templates = Jinja2Templates(directory="templates")
 
