@@ -29,7 +29,7 @@ else:
 
 model.to(device)
 
-templates = Jinja2Templates(directory=".")
+templates = Jinja2Templates(directory="templates")
 
 class DialogueInput(BaseModel):
     dialogue: str
