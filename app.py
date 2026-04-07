@@ -64,16 +64,17 @@ def summarize_dialogue(dialogue : str) -> str:
 
     # generate the summary => token ids
     model.to(device)
-    targets = model.generate(
-        input_ids=inputs["input_ids"],
-        attention_mask=inputs["attention_mask"],
-        max_length=250, # increased
-        min_length = 100, # push for longer summaries
-        num_beams=4,
-        length_penalty= 2.0, # encourages longer, complete summaries 
-        early_stopping=True, 
-        no_repeat_ngram_size = 3 # prevent repetitive phrases
-    )
+    with torch.no_grad():
+        targets = model.generate(
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            max_length=250, # increased
+            min_length = 100, # push for longer summaries
+            num_beams=4,
+            length_penalty= 2.0, # encourages longer, complete summaries 
+            early_stopping=True, 
+            no_repeat_ngram_size = 3 # prevent repetitive phrases
+        )
     
     # decoded our output
     summary = tokenizer.decode(targets[0], skip_special_tokens=True) # EOS, SEP
