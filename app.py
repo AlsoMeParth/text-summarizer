@@ -16,8 +16,16 @@ app = FastAPI(title="Text Summarizer App", description="Text Summarization using
 # model = T5ForConditionalGeneration.from_pretrained(MODEL_PATH)
 # tokenizer = T5Tokenizer.from_pretrained(MODEL_PATH)
 
-model = T5ForConditionalGeneration.from_pretrained("AlsoMeParth/Text-Summarizer-T5")
-tokenizer = T5Tokenizer.from_pretrained("AlsoMeParth/Text-Summarizer-T5")
+model = None
+tokenizer = None
+
+def get_model():
+    global model, tokenizer
+    if model is None:
+        model = T5ForConditionalGeneration.from_pretrained("AlsoMeParth/Text-Summarizer-T5")
+        tokenizer = T5Tokenizer.from_pretrained("AlsoMeParth/Text-Summarizer-T5")
+        model.to(device)
+    return model, tokenizer
 
 # device
 if torch.backends.mps.is_available():
@@ -42,6 +50,7 @@ def clean_data(text):
     return text
 
 def summarize_dialogue(dialogue : str) -> str:
+    model, tokenizer = get_model()
     dialogue = clean_data(dialogue) # clean
 
     # tokenize
